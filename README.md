@@ -2,22 +2,9 @@
 
 This is a MERN (MongoDB, Express, React, Node.js) application that has been Dockerized to simplify deployment and management.
 
-### 🛠️ Project Structure
+## 🛠️ Project Structure
 
-STAFFSYNC/
-│── backend/           # Node.js backend
-│   ├── db/           # Database connection
-│   ├── routes/       # API routes
-│   ├── server.js     # Main server file
-│   ├── .env          # Environment variables (to be created manually)
-│   ├── Dockerfile    # Backend Docker setup
-│   ├── package.json  # Backend dependencies
-│── frontend/         # React frontend
-│   ├── src/         # React components
-│   ├── public/      # Static files
-│   ├── package.json  # Frontend dependencies
-│── docker-compose.yaml  # Docker setup
-│── README.md         # Documentation
+STAFFSYNC/ │── backend/ # Node.js backend │ ├── db/ # Database connection │ ├── routes/ # API routes │ ├── server.js # Main server file │ ├── .env # Environment variables (to be created manually) │ ├── Dockerfile # Backend Docker setup │ ├── package.json # Backend dependencies │── frontend/ # React frontend │ ├── src/ # React components │ ├── public/ # Static files │ ├── package.json # Frontend dependencies │── docker-compose.yaml # Docker setup │── README.md # Documentation
 
 🚀 Local Development Setup
 
@@ -56,5 +43,5 @@ docker-compose down
 ```
 ## 🌍 Accessing the Application
 
-Frontend: Open in browser → http://localhost:3000
+Frontend: Open in browser → http://localhost:3000 
 Backend API: Check with Postman → http://localhost:5050/api
