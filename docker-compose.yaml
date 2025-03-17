@@ -13,6 +13,8 @@ services:
       - private-network
     depends_on:
       - database
+    env_file:
+      - ./backend/.env
   database:
     image: mongo:6.0.13-jammy
     ports:
