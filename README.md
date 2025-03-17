@@ -37,16 +37,16 @@ services:
 
 secrets:
   mongo_uri:
-    file: ./secrets/mongo_uri  # Secure MongoDB URI
+    file: ./secrets/mongo_uri  
   jwt_secret:
-    file: ./secrets/jwt_secret  # Secure JWT secret
+    file: ./secrets/jwt_secret  
   api_key:
-    file: ./secrets/api_key  # Secure API key
+    file: ./secrets/api_key 
 ``` 
 ---
 ## Create Secret Files
 
-```
+```sh
 mkdir -p secrets
 echo "mongodb://database:27017/employees" > secrets/mongo_uri
 echo "my-super-secret-jwt-key" > secrets/jwt_secret
@@ -56,11 +56,11 @@ echo "12345-abcdef-67890" > secrets/api_key
 ---
 ##  Modify server.js to Read Secrets
 
-```
+```js
 import fs from "fs";
 import { MongoClient, ServerApiVersion } from "mongodb";
 
-// Function to read secrets from Docker Secrets
+
 const readSecret = (path) => {
   try {
     return fs.readFileSync(path, "utf8").trim();
@@ -70,16 +70,15 @@ const readSecret = (path) => {
   }
 };
 
-// Load secrets
 const MONGODB_URI = readSecret("/run/secrets/mongo_uri");
 const JWT_SECRET = readSecret("/run/secrets/jwt_secret");
 const API_KEY = readSecret("/run/secrets/api_key");
 
-console.log("MongoDB URI:", MONGODB_URI);  // Debugging only, remove in production
+console.log("MongoDB URI:", MONGODB_URI);  
 console.log("JWT Secret:", JWT_SECRET);
 console.log("API Key:", API_KEY);
 
-// Connect to MongoDB
+
 const client = new MongoClient(MONGODB_URI, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -96,7 +95,7 @@ try {
   console.error("MongoDB Connection Error:", err);
 }
 
-// Export database and secrets
+
 let db = client.db("employees");
 
 export { db, JWT_SECRET, API_KEY };
@@ -105,7 +104,7 @@ export { db, JWT_SECRET, API_KEY };
 ---
 
 ## Run the Application
-```
+```sh
 docker-compose up -d
 
 ```
