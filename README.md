@@ -1,16 +1,22 @@
-🚀 StaffSync Backend - Secure Setup with Docker Secrets
+# 🚀 StaffSync Backend - Secure Setup with Docker Secrets
 
-This guide explains how to set up the StaffSync Backend using Docker secrets for secure credential management.
+This guide explains how to set up the **StaffSync Backend** using **Docker secrets** for secure credential management.
 
-📌 Overview
+---
 
-Uses Docker Secrets for sensitive credentials (MongoDB URI, JWT Secret, API Key).
-Ensures secure storage and prevents credentials from being exposed in environment variables.
-Seamlessly integrates with a Dockerized backend.
-🛠 Docker Compose Configuration
+## 📌 Overview
 
-Add the following to your docker-compose.yml file:
+Uses **Docker Secrets** for sensitive credentials (**MongoDB URI, JWT Secret, API Key**).  
+This ensures **secure storage** and prevents credentials from being exposed in environment variables.  
+Seamlessly integrates with a **Dockerized backend**.
 
+---
+
+## 🛠 Docker Compose Configuration
+
+Add the following to your `docker-compose.yml` file:
+
+```yaml
 services:
   backend:
     build: ./backend
@@ -36,25 +42,21 @@ secrets:
     file: ./secrets/jwt_secret  # Secure JWT secret
   api_key:
     file: ./secrets/api_key  # Secure API key
-✅ Each secret is securely stored in a file and mapped inside the container at /run/secrets/....
+``` 
+---
+## Create Secret Files
 
-📝 Step 2: Create Secret Files
-
-Create a secrets directory and add secret values in separate files.
-
-Run the following commands:
-
+```
 mkdir -p secrets
 echo "mongodb://database:27017/employees" > secrets/mongo_uri
 echo "my-super-secret-jwt-key" > secrets/jwt_secret
 echo "12345-abcdef-67890" > secrets/api_key
-✅ Now, the secrets are stored in files and ready to be used by Docker.
 
-📝 Step 3: Modify server.js to Read Secrets
+```
+---
+##  Modify server.js to Read Secrets
 
-Instead of using process.env, read the secret files inside your Node.js application.
-
-server.js
+```
 import fs from "fs";
 import { MongoClient, ServerApiVersion } from "mongodb";
 
@@ -98,13 +100,12 @@ try {
 let db = client.db("employees");
 
 export { db, JWT_SECRET, API_KEY };
-✅ This ensures secrets are read securely from Docker Secrets and not exposed in environment variables.
 
-🚀 Step 4: Run the Application
+```
+---
 
-Once everything is set up, start the application using:
-
+## Run the Application
+```
 docker-compose up -d
-Check running containers:
 
-docker ps
+```
