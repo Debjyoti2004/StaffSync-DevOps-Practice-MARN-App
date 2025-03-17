@@ -1,4 +1,4 @@
-# 🚀 StaffSync Backend - Secure Setup with Docker Secrets
+# 🛡️ Secure Setup with Docker Secrets (Environment Variables)
 
 This guide explains how to set up the **StaffSync Backend** using **Docker secrets** for secure credential management.
 
@@ -17,6 +17,8 @@ Seamlessly integrates with a **Dockerized backend**.
 Add the following to your `docker-compose.yml` file:
 
 ```yaml
+version: "3.8"
+
 services:
   backend:
     build: ./backend
