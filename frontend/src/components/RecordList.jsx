@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
+const API_BASE_URL = "http://localhost:5050/record";
+
 const Record = (props) => {
   const rowVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -10,7 +12,7 @@ const Record = (props) => {
 
   return (
     <motion.tr 
-      className="border-b border-gray-700 transition-colors hover:bg-gray-700/50"
+      className="transition-colors border-b border-gray-700 hover:bg-gray-700/50"
       variants={rowVariants}
     >
       <td className="p-4 font-medium text-gray-100 align-middle">
@@ -32,14 +34,14 @@ const Record = (props) => {
         <div className="flex gap-2">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link
-              className="inline-flex justify-center items-center px-3 h-9 text-sm font-medium text-gray-300 bg-gray-700 rounded-md border border-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-800 hover:bg-gray-600"
+              className="inline-flex items-center justify-center px-3 text-sm font-medium text-gray-300 transition-colors bg-gray-700 border border-gray-600 rounded-md h-9 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-800 hover:bg-gray-600"
               to={`/edit/${props.record._id}`}
             >
               Edit
             </Link>
           </motion.div>
           <motion.button
-            className="inline-flex justify-center items-center px-3 h-9 text-sm font-medium text-white bg-red-800 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 hover:bg-red-700"
+            className="inline-flex items-center justify-center px-3 text-sm font-medium text-white transition-colors bg-red-800 rounded-md h-9 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 hover:bg-red-700"
             type="button"
             onClick={() => {
               props.deleteRecord(props.record._id);
@@ -60,7 +62,6 @@ export default function RecordList() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -77,12 +78,11 @@ export default function RecordList() {
     visible: { opacity: 1, y: 0 }
   };
 
-
   useEffect(() => {
     async function getRecords() {
       setIsLoading(true);
       try {
-        const response = await fetch(`http://localhost:5050/record/`);
+        const response = await fetch(`${API_BASE_URL}/`);
         if (!response.ok) {
           throw new Error(`An error occurred: ${response.statusText}`);
         }
@@ -101,7 +101,7 @@ export default function RecordList() {
 
   async function deleteRecord(id) {
     try {
-      const response = await fetch(`http://localhost:5050/record/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/${id}`, {
         method: "DELETE",
       });
       
@@ -116,7 +116,6 @@ export default function RecordList() {
     }
   }
 
-  
   function recordList() {
     return records.map((record) => {
       return (
@@ -128,7 +127,6 @@ export default function RecordList() {
       );
     });
   }
-
   
   return (
     <motion.div 
@@ -145,7 +143,7 @@ export default function RecordList() {
       
       {error && (
         <motion.div 
-          className="px-4 py-3 mb-4 text-red-200 rounded border border-red-800 bg-red-900/50"
+          className="px-4 py-3 mb-4 text-red-200 border border-red-800 rounded bg-red-900/50"
           variants={itemVariants}
         >
           {error}
@@ -162,7 +160,7 @@ export default function RecordList() {
         </motion.div>
       ) : records.length === 0 ? (
         <motion.div 
-          className="py-12 text-center bg-gray-800 rounded-lg border border-gray-700"
+          className="py-12 text-center bg-gray-800 border border-gray-700 rounded-lg"
           variants={itemVariants}
         >
           <p className="text-gray-400">No employee records found</p>
@@ -175,7 +173,7 @@ export default function RecordList() {
         </motion.div>
       ) : (
         <motion.div 
-          className="overflow-hidden bg-gray-800 rounded-lg border border-gray-700 shadow-lg"
+          className="overflow-hidden bg-gray-800 border border-gray-700 rounded-lg shadow-lg"
           variants={itemVariants}
         >
           <div className="overflow-x-auto">

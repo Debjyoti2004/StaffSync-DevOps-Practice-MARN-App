@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
+const API_BASE_URL = "http://localhost:5050/record";
+
 export default function Record() {
   const [form, setForm] = useState({
     name: "",
@@ -15,17 +17,16 @@ export default function Record() {
 
   useEffect(() => {
     async function fetchData() {
-      const id = params.id?.toString() || undefined;
+      const id = params.id?.toString();
       if (!id) return;
       setIsNew(false);
-      const response = await fetch(
-        `http://localhost:5050/record/${params.id.toString()}`
-      );
+      const response = await fetch(`${API_BASE_URL}/${id}`);
+      
       if (!response.ok) {
-        const message = `An error has occurred: ${response.statusText}`;
-        console.error(message);
+        console.error(`An error has occurred: ${response.statusText}`);
         return;
       }
+
       const record = await response.json();
       if (!record) {
         console.warn(`Record with id ${id} not found`);
@@ -35,92 +36,56 @@ export default function Record() {
       setForm(record);
     }
     fetchData();
-    return;
   }, [params.id, navigate]);
 
   function updateForm(value) {
-
     if (Object.keys(value)[0] in errors) {
       setErrors((prev) => ({
         ...prev,
         [Object.keys(value)[0]]: null,
       }));
     }
-    return setForm((prev) => {
-      return { ...prev, ...value };
-    });
+    setForm((prev) => ({ ...prev, ...value }));
   }
-
 
   const validateForm = () => {
     const newErrors = {};
-    if (!form.name.trim()) {
-      newErrors.name = "Name is required";
-    }
-    if (!form.position.trim()) {
-      newErrors.position = "Job title is required";
-    }
-    if (!form.level) {
-      newErrors.level = "Experience level is required";
-    }
+    if (!form.name.trim()) newErrors.name = "Name is required";
+    if (!form.position.trim()) newErrors.position = "Job title is required";
+    if (!form.level) newErrors.level = "Experience level is required";
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; 
   };
 
   async function onSubmit(e) {
     e.preventDefault();
+    if (!validateForm()) return;
 
-    const isValid = validateForm();
-    if (!isValid) {
-      return; 
-    }
-
-    const person = { ...form };
     try {
-      let response;
-      if (isNew) {
-        response = await fetch("http://localhost:5050/record", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(person),
-        });
-      } else {
-        response = await fetch(`http://localhost:5050/record/${params.id}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(person),
-        });
-      }
+      const response = await fetch(
+        isNew ? API_BASE_URL : `${API_BASE_URL}/${params.id}`,
+        {
+          method: isNew ? "POST" : "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      
       setForm({ name: "", position: "", level: "" });
       navigate("/");
     } catch (error) {
-      console.error("A problem occurred adding or updating a record: ", error);
+      console.error("A problem occurred adding or updating a record:", error);
     }
   }
 
-  const fadeIn = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.5 } },
-  };
-
-  const slideUp = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.4 } },
-  };
-
   return (
     <motion.div
-      className="py-6 mx-auto max-w-4xl"
+      className="max-w-4xl py-6 mx-auto"
       initial="hidden"
       animate="visible"
       variants={fadeIn}
@@ -133,7 +98,7 @@ export default function Record() {
       </motion.h3>
       <motion.form
         onSubmit={onSubmit}
-        className="overflow-hidden bg-gray-800 rounded-lg border border-gray-700 shadow-lg"
+        className="overflow-hidden bg-gray-800 border border-gray-700 rounded-lg shadow-lg"
         variants={slideUp}
       >
         <div className="px-6 py-5 border-b border-gray-700">
@@ -152,7 +117,7 @@ export default function Record() {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 gap-x-6 gap-y-6 max-w-2xl">
+            <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-6">
               <motion.div
                 className="sm:col-span-4"
                 variants={slideUp}
@@ -313,7 +278,7 @@ export default function Record() {
         >
           <motion.button
             type="submit"
-            className="inline-flex justify-center items-center px-4 py-2 font-medium text-white bg-purple-600 rounded-md border border-transparent shadow-md transition-all duration-300 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-purple-500"
+            className="inline-flex items-center justify-center px-4 py-2 font-medium text-white transition-all duration-300 bg-purple-600 border border-transparent rounded-md shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-purple-500"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
