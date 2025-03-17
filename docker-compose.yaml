@@ -1,0 +1,32 @@
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    networks:
+      - private-network
+  backend:
+    build: ./backend
+    ports:
+      - "5050:5050"
+    networks:
+      - private-network
+    depends_on:
+      - database
+  database:
+    image: mongo:6.0.13-jammy
+    ports:
+      - "27017:27017"
+    networks:
+      - private-network
+    volumes:
+      - db:/data/db
+
+
+networks:
+  private-network:
+    driver: bridge
+
+volumes:
+  db:
+    driver: local
