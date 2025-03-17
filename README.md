@@ -3,9 +3,9 @@
 This is a MERN (MongoDB, Express, React, Node.js) application that has been Dockerized to simplify deployment and management.
 
 ## 🛠️ Project Structure
-
+```
 STAFFSYNC/ │── backend/ # Node.js backend │ ├── db/ # Database connection │ ├── routes/ # API routes │ ├── server.js # Main server file │ ├── .env # Environment variables (to be created manually) │ ├── Dockerfile # Backend Docker setup │ ├── package.json # Backend dependencies │── frontend/ # React frontend │ ├── src/ # React components │ ├── public/ # Static files │ ├── package.json # Frontend dependencies │── docker-compose.yaml # Docker setup │── README.md # Documentation
-
+```
 🚀 Local Development Setup
 
 1️⃣ Backend Setup
