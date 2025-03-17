@@ -44,7 +44,10 @@ Add the following variables inside the .env file:
 MONGODB_URL=<your-mongodb-connection-string>
 PORT=5050
 ```
-If you change the PORT, update API_BASE_URL in the frontend/src/components/Record.jsx and RecordList.jsx.
+If you change the PORT, update API_BASE_URL in the 
+```
+frontend/src/components/Record.jsx and RecordList.jsx.
+```
 ## 🐳 Running with Docker
 
 Start the Application:
